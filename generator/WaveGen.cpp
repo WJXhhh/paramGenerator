@@ -2,13 +2,14 @@
 // Created by 吴栋 on 2025/10/2.
 //
 
-#include "../WaveGen.h"
+#include "WaveGen.h"
 #include "../struct/Point.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <random>
 #include <algorithm>
+#include <set>
 
 // 一维柏林噪声生成器
 class PerlinNoise {
@@ -25,13 +26,12 @@ private:
 
     double grad(int hash, double x) {
         int h = hash & 15;
-        double grad = 1.0 + (h & 7); // 梯度值1-8
-        return (h & 8) ? -grad : grad; // 随机方向
+        double grad = 1.0 + (h & 7);
+        return (h & 8) ? -grad : grad;
     }
 
 public:
     PerlinNoise() {
-        // 初始化排列表
         p = {
             151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,
             8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,
@@ -46,38 +46,32 @@ public:
             107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,
             138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
         };
-        // 双倍排列表
         p.insert(p.end(), p.begin(), p.end());
     }
 
     double noise(double x) {
-        // 网格单元
         int X = (int)floor(x) & 255;
-
-        // 相对网格坐标
         x -= floor(x);
-
-        // 计算加权参数
         double u = fade(x);
-
-        // 哈希坐标
         int A = p[X];
         int B = p[X+1];
-
-        // 插值
         return lerp(u, grad(A, x), grad(B, x-1));
     }
 };
 
-// 高斯平滑滤波器
-std::vector<Point> gaussianSmooth(const std::vector<Point>& points, double sigma = 2.0, int kernelSize = 5) {
+// 高斯平滑滤波器（保护关键点）
+std::vector<Point> gaussianSmoothWithKeyPoints(
+    const std::vector<Point>& points,
+    const std::set<size_t>& protectedIndices,
+    double sigma = 2.0,
+    int kernelSize = 5) {
+
     if (points.empty()) return points;
 
     // 创建高斯核
     std::vector<double> kernel;
     double sum = 0.0;
 
-    // 计算高斯核
     int halfSize = kernelSize / 2;
     for (int i = -halfSize; i <= halfSize; ++i) {
         double value = std::exp(-(i * i) / (2 * sigma * sigma));
@@ -90,22 +84,32 @@ std::vector<Point> gaussianSmooth(const std::vector<Point>& points, double sigma
         value /= sum;
     }
 
-    // 应用高斯平滑
+    // 应用高斯平滑（跳过保护点）
     std::vector<Point> smoothedPoints = points;
 
     for (size_t i = 0; i < points.size(); ++i) {
+        // 如果是保护点，跳过平滑
+        if (protectedIndices.find(i) != protectedIndices.end()) {
+            continue;
+        }
+
         double smoothedY = 0.0;
         int count = 0;
 
         for (int j = -halfSize; j <= halfSize; ++j) {
             int index = static_cast<int>(i) + j;
             if (index >= 0 && index < static_cast<int>(points.size())) {
-                smoothedY += points[index].y * kernel[j + halfSize];
+                // 如果邻居是保护点，使用原始值
+                if (protectedIndices.find(index) != protectedIndices.end()) {
+                    smoothedY += points[index].y * kernel[j + halfSize];
+                } else {
+                    smoothedY += smoothedPoints[index].y * kernel[j + halfSize];
+                }
                 count++;
             }
         }
 
-        // 如果边界点没有足够的邻居，调整权重
+        // 边界处理
         if (count < kernelSize) {
             smoothedY *= static_cast<double>(kernelSize) / count;
         }
@@ -116,21 +120,21 @@ std::vector<Point> gaussianSmooth(const std::vector<Point>& points, double sigma
     return smoothedPoints;
 }
 
-// 波形生成函数（山峰高度基于起始点）
+// 波形生成函数（保护关键点）
 std::vector<Point> generateMountainWave(
-    double startX, double endX,       // 起点和终点X坐标
-    double peakStartX, double peakEndX, // 山峰起始和结束位置
-    double startHeight,               // 起点高度
-    double peakHeightOffset,          // 山峰高度相对于起点的增量
-    double endHeight,                 // 终点高度
-    int waveType,                     // 波形类型 (0:平缓, 1:凹陷, 2:凸起)
-    double intensity,           // 凹陷/凸起强度
-    double width,               // 凹陷/凸起宽度
-    double position,            // 凹陷/凸起位置 (0-1)
-    bool allowNegative,         // 是否允许负值
-    bool smoothBaseCurve,       // 是否平滑基础曲线
-    double noiseIntensity       // 噪声强度系数
-) {
+    double startX, double endX,
+    double peakStartX, double peakEndX,
+    double startHeight,
+    double peakHeightOffset,
+    double endHeight,
+    int waveType,
+    double intensity,
+    double width,
+    double position,
+    bool allowNegative,
+    bool smoothBaseCurve,
+    double noiseIntensity) {
+
     std::vector<Point> points;
     PerlinNoise pn;
 
@@ -170,8 +174,8 @@ std::vector<Point> generateMountainWave(
             if (waveType == 1) {
                 double distance = std::abs(x - centerX);
                 if (distance < width/2) {
-                    double t = distance / (width/2); // 0-1
-                    double depth = intensity * (1 - t*t); // 二次曲线凹陷
+                    double t = distance / (width/2);
+                    double depth = intensity * (1 - t*t);
                     y -= depth;
                 }
             }
@@ -179,8 +183,8 @@ std::vector<Point> generateMountainWave(
             else if (waveType == 2) {
                 double distance = std::abs(x - centerX);
                 if (distance < width/2) {
-                    double t = distance / (width/2); // 0-1
-                    double bulge = intensity * (1 - t*t); // 二次曲线凸起
+                    double t = distance / (width/2);
+                    double bulge = intensity * (1 - t*t);
                     y += bulge;
                 }
             }
@@ -189,20 +193,47 @@ std::vector<Point> generateMountainWave(
         points.push_back({x, y});
     }
 
-    // 平滑基础曲线
+    // 识别关键点（起始点、终点、最高点）
+    std::set<size_t> protectedIndices;
+
+    // 起始点
+    protectedIndices.insert(0);
+
+    // 终点
+    protectedIndices.insert(points.size() - 1);
+
+    // 最高点（山峰中心点）
+    size_t peakIndex = 0;
+    double minDistance = std::numeric_limits<double>::max();
+
+    for (size_t i = 0; i < points.size(); ++i) {
+        double distance = std::abs(points[i].x - centerX);
+        if (distance < minDistance) {
+            minDistance = distance;
+            peakIndex = i;
+        }
+    }
+    protectedIndices.insert(peakIndex);
+
+    // 平滑基础曲线（保护关键点）
     if (smoothBaseCurve) {
-        points = gaussianSmooth(points);
+        points = gaussianSmoothWithKeyPoints(points, protectedIndices);
     }
 
-    // 添加柏林噪声
-    const double noiseScale = 0; // 噪声缩放系数
-    for (auto& point : points) {
-        double noise = pn.noise(point.x * noiseScale) * noiseStrength;
-        point.y += noise;
+    // 添加柏林噪声（不影响关键点）
+    const double noiseScale = 0.1;
+    for (size_t i = 0; i < points.size(); ++i) {
+        // 如果是关键点，不添加噪声
+        if (protectedIndices.find(i) != protectedIndices.end()) {
+            continue;
+        }
+
+        double noise = pn.noise(points[i].x * noiseScale) * noiseStrength;
+        points[i].y += noise;
 
         // 如果不允许负值，确保y不小于0
         if (!allowNegative) {
-            point.y = std::max(0.0, point.y);
+            points[i].y = std::max(0.0, points[i].y);
         }
     }
 

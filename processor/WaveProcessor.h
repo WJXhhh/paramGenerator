@@ -14,5 +14,7 @@ std::pair<std::vector<Point>, std::vector<Point>> smoothFusion(
     const std::vector<Point>& wave1,
     const std::vector<Point>& wave2);
 
+double lerpw(double a, double b, double t);
+
 
 #endif //PARAMGENERATOR_WAVEPROCESSOR_H

@@ -15,4 +15,10 @@ add_executable(paramGenerator main.cpp
         reasoner/vel_reasoner.cpp
         reasoner/vel_reasoner.h
         struct/note_simple.h
+        struct/note_normal.h
+        cons.h
+        cons.cpp
+        reasoner/bre_reasoner.cpp
+        reasoner/bre_reasoner.h
+        math/soft_diff.h
 )

@@ -14,5 +14,7 @@ std::pair<std::vector<Point>, std::vector<Point>> processWaveforms(
     const std::vector<Point>& wave2,
     double pbs, int m, int n);
 
+double lerpw(double a, double b, double t);
+
 
 #endif //PARAMGENERATOR_PITCHPROCESSOR_H

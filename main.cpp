@@ -1,60 +1,75 @@
+#include <fstream>
 #include <iostream>
+#include "./json/json.hpp"
+#include "./struct/note_normal.h"
 #include "struct/Point.h"
 #include "generator/WaveGen.h"
 #include "processor/WaveProcessor.h"
+#include "struct/note_simple.h"
+#include "reasoner/vel_reasoner.h"
+#include "reasoner/bre_reasoner.h"
+#include "cons.h"
+
+using namespace std;
+using namespace nlohmann;
 
 int main() {
 
-    auto wave1 = generateMountainWave(
-        0, 100,   // X范围
-        30, 70,   // 山峰位置
-        0,       // 起点高度
-        50,       // 山峰高度相对于起点的增量 (10+40=50)
-        20,       // 终点高度
-        0,        // 平缓波形
-        0.0,      // 凹陷/凸起强度
-        0.0,      // 凹陷/凸起宽度
-        0.5,      // 凹陷/凸起位置
-        true,     // 允许负值
-        true      // 平滑基础曲线
-    );
-
-    auto wave2 = generateMountainWave(
-        80, 180,   // X范围
-        110, 150,   // 山峰位置
-        0,       // 起点高度
-        50,       // 山峰高度相对于起点的增量 (10+40=50)
-        20,       // 终点高度
-        0,        // 平缓波形
-        0.0,      // 凹陷/凸起强度
-        0.0,      // 凹陷/凸起宽度
-        0.5,      // 凹陷/凸起位置
-        true,
-        true
-    );
-
-    auto [firstHalf,secondHalf] = smoothFusion(wave1, wave2);
-
-    // 输出波形1的点
-    std::cout << "Wave 1 Points (Smoothed Base):\n";
-    for (const auto& p : wave1) {
-        std::cout << "(" << p.x << ", " << p.y << ")\n";
+    ifstream file("./noteExp.txt");
+    if (!file.is_open()) {
+        cout << "Failed to open file." << endl;
+        return 1;
     }
 
-    std::cout << "Wave 2 Points (Smoothed Base):\n";
-    for (const auto& p : wave2) {
-        std::cout << "(" << p.x << ", " << p.y << ")\n";
+    ifstream file2("./tempoExp.txt");
+    if (!file2.is_open()) {
+        cout << "Failed to open file." << endl;
+        return 1;
     }
 
-    std::cout << "FWave 1 Points (Smoothed Base):\n";
-    for (const auto& p : firstHalf) {
-        std::cout << "(" << p.x << ", " << p.y << ")\n";
+    //double tempo;
+
+    file2 >> tempo;
+
+    cout<<tempo<<endl;
+
+    json Mj;
+    file >> Mj;
+
+    vector<note_normal> allNotes;
+
+    vector<note_simple> allSNotes;
+
+    if (Mj.is_array()) {
+        for (auto& item : Mj) {
+
+            {
+                note_normal nt = item.get<note_normal>();
+                note_simple sn = note_simple{
+                        (double)nt.posTick,
+                        nt.noteNum,
+                        (double)nt.durTick,
+                        nt.phonemes
+                };
+                allNotes.push_back(nt);
+                allSNotes.push_back(sn);
+
+            }
+        }
+
+        vector<pair<int,double>> rs = resultBRE(allSNotes);
+
+        for (auto &item:rs) {
+            //cout<<item.first<<" , "<<item.second<<endl;
+        }
+
+
+
+
+    }else {
+        cout<<"noarray"<<endl;
     }
 
-    std::cout << "FWave 2 Points (Smoothed Base):\n";
-    for (const auto& p : secondHalf) {
-        std::cout << "(" << p.x << ", " << p.y << ")\n";
-    }
 
 
 

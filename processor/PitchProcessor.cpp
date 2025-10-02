@@ -2,14 +2,14 @@
 // Created by 吴栋 on 2025/10/2.
 //
 
-#include "../PitchProcessor.h"
+#include "PitchProcessor.h"
 
 #include <vector>
 #include <cmath>
 
 #include "../struct/Point.h"
 
-double lerp(double a, double b, double t) {
+double lerpp(double a, double b, double t) {
     return a + t * (b - a);
 }
 
@@ -26,10 +26,9 @@ void applyOffset(std::vector<Point>& wave, double offset) {
 }
 
 // 寻找重叠区域
-std::pair<size_t, size_t> findOverlapRegion(
+std::pair<size_t, size_t> findOverlapRegionp(
     const std::vector<Point>& wave1,
-    const std::vector<Point>& wave2,
-    double threshold = 5.0) {
+    const std::vector<Point>& wave2) {
 
     // 检查是否有重叠
     if (wave1.empty() || wave2.empty() || wave1.back().x < wave2.front().x) {
@@ -69,7 +68,7 @@ std::vector<Point> smoothFusion(
     double offset) {
 
     // 1. 寻找重叠区域
-    auto [startIdx1, endIdx2] = findOverlapRegion(wave1, wave2);
+    auto [startIdx1, endIdx2] = findOverlapRegionp(wave1, wave2);
 
     // 如果没有重叠区域，直接拼接
     if (startIdx1 >= wave1.size() || endIdx2 == 0) {
@@ -113,10 +112,10 @@ std::vector<Point> smoothFusion(
 
         // 插值计算（带除零保护）
         double t1 = (std::fabs(p1b.x - p1a.x) < 1e-10) ? 0 : (x - p1a.x) / (p1b.x - p1a.x);
-        double y1 = lerp(p1a.y, p1b.y, t1);
+        double y1 = lerpp(p1a.y, p1b.y, t1);
 
         double t2 = (std::fabs(p2b.x - p2a.x) < 1e-10) ? 0 : (x - p2a.x) / (p2b.x - p2a.x);
-        double y2 = lerp(p2a.y, p2b.y, t2);
+        double y2 = lerpp(p2a.y, p2b.y, t2);
 
         // 计算权重（带除零保护）
         double weight;
