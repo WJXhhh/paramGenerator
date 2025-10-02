@@ -3,12 +3,26 @@
 //
 
 #include "vel_reasoner.h"
+
+#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "../struct/note_simple.h"
 
 using namespace std;
 
+map<string,double> pho_spe_down = {
+        {"ts\\", 0.8},
+        {"y", 1.2},
+
+};
+
+map<string,double> pho_spe_up = {
+    {"ts\\", 0.9},
+    {"y", 1.1},
+
+};
 
 vector<int> result(const vector<note_simple>& notes)
 {
