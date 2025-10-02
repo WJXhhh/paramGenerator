@@ -2,12 +2,12 @@
 // Created by 吴栋 on 2025/10/2.
 //
 
-#include "PitchProcessor.h"
+#include "../PitchProcessor.h"
 
 #include <vector>
 #include <cmath>
 
-#include "Point.h"
+#include "../struct/Point.h"
 
 double lerp(double a, double b, double t) {
     return a + t * (b - a);

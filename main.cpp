@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Point.h"
-#include "WaveGen.h"
-#include "WaveProcessor.h"
+#include "struct/Point.h"
+#include "generator/WaveGen.h"
+#include "processor/WaveProcessor.h"
 
 int main() {
 

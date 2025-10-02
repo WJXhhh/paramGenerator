@@ -6,7 +6,7 @@
 #define PARAMGENERATOR_PITCHPROCESSOR_H
 #include <vector>
 
-#include "Point.h"
+#include "../struct/Point.h"
 
 
 std::pair<std::vector<Point>, std::vector<Point>> processWaveforms(

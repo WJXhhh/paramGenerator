@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include "Point.h"
+#include "../struct/Point.h"
 
 
 std::pair<std::vector<Point>, std::vector<Point>> smoothFusion(

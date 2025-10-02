@@ -2,14 +2,14 @@
 // Created by 吴栋 on 2025/10/2.
 //
 
-#include "WaveProcessor.h"
+#include "../WaveProcessor.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <algorithm>
 #include <utility>
 
-#include "Point.h"
+#include "../struct/Point.h"
 
 // 线性插值函数
 double lerp(double a, double b, double t) {

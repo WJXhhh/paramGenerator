@@ -6,7 +6,7 @@
 #define PARAMGENERATOR_WAVEGEN_H
 #include <vector>
 
-#include "Point.h"
+#include "../struct/Point.h"
 
 
 std::vector<Point> generateMountainWave(

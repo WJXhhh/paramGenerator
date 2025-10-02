@@ -4,11 +4,15 @@ project(paramGenerator)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(paramGenerator main.cpp
-        Point.h
-        WaveGen.cpp
-        WaveGen.h
-        WaveProcessor.cpp
-        WaveProcessor.h
-        PitchProcessor.cpp
-        PitchProcessor.h
+        struct/Point.h
+        generator/WaveGen.cpp
+        generator/WaveGen.h
+        processor/WaveProcessor.cpp
+        processor/WaveProcessor.h
+        processor/PitchProcessor.cpp
+        processor/PitchProcessor.h
+        json/json.hpp
+        reasoner/vel_reasoner.cpp
+        reasoner/vel_reasoner.h
+        struct/note_simple.h
 )

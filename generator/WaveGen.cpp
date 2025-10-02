@@ -2,8 +2,8 @@
 // Created by 吴栋 on 2025/10/2.
 //
 
-#include "WaveGen.h"
-#include "Point.h"
+#include "../WaveGen.h"
+#include "../struct/Point.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
