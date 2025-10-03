@@ -11,6 +11,10 @@ extern double headPos;
 
 extern double endPos;
 
+extern double pbs;
+
+extern double drama;
+
 
 
 #endif //PARAMGENERATOR_CONS_H

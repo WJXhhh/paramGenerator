@@ -44,33 +44,33 @@ vector<pair<int,double>> resultBRE (const vector<note_simple> &notes) {
         vector<Point> ttv;
 
         if (dtl >= 8 || (!hasPrev)) {
-            double height = 15+((softDiffAtan<double>(note.pitch,60,80,1))*1);
-            double ph = 10+((softDiffAtan<double>(note.pitch,60,50,1))*2);
+            double height = (15+((softDiffAtan<double>(note.pitch,60,40,1))*1))*0.7;
+            double ph = 10+((softDiffAtan<double>(note.pitch,60,50,1))*1);
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            10,height,10,2,ph,0.4*note.duration,0.2,false,true
+            10,height,10,2,ph,0.5*note.duration,0.2,false,true,0.05
 
             );
             ttv = wv;
         }else if (dtp<=-3) {
-            double height = 15+((softDiffAtan<double>(note.pitch,60,80,1))*1);
-            double ph = 5+((softDiffAtan<double>(note.pitch,60,50,1))*2);
+            double height = (15+((softDiffAtan<double>(note.pitch,60,40,1))*1))*0.7;
+            double ph = 5+((softDiffAtan<double>(note.pitch,60,50,1))*1);
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            10,height,10,1,ph,0.2*note.duration,0.2,false,true
+            10,height,10,1,ph,0.4*note.duration,0.2,false,true,0.05
 
             );
             ttv = wv;
         }
         else if (dtp>=3) {
-            double height = 15+((softDiffAtan<double>(note.pitch,60,80,1))*1);
-            double ph = 5+((softDiffAtan<double>(note.pitch,60,50,1))*2);
+            double height = (15+((softDiffAtan<double>(note.pitch,60,40,1))*1))*0.7;
+            double ph = 5+((softDiffAtan<double>(note.pitch,60,50,1))*1);
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            10,height,10,2,ph,0.2*note.duration,0.2,false,true
+            10,height,10,2,ph,0.4*note.duration,0.2,false,true,0.05
 
             );
             ttv = wv;
@@ -81,7 +81,7 @@ vector<pair<int,double>> resultBRE (const vector<note_simple> &notes) {
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            10,height,10,0,0,0,0,false,true
+            10,height,10,0,0,0,0,false,true,0.05
 
             );
             ttv = wv;

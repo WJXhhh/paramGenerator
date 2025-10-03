@@ -10,6 +10,7 @@
 #include "reasoner/bre_reasoner.h"
 #include "cons.h"
 #include "reasoner/bri_reasoner.h"
+#include "reasoner/pit_reasoner.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -58,12 +59,58 @@ int main() {
             }
         }
 
-        vector<pair<int,double>> rs = resultBRI(allSNotes);
+        vector<pair<int,double>> rsbri = resultBRI(allSNotes);
+        vector<pair<int,double>> rsbre = resultBRE(allSNotes);
+        vector<double> rsvel = resultVEL(allSNotes);
 
-        for (auto &item:rs) {
-            cout<<item.first<<" , "<<item.second<<"\n";
+
+        // 输出 rsbri 到 rsbri.txt
+        ofstream briFile("rsbri.txt");
+        if (briFile.is_open()) {
+            for (const auto& item : rsbri) {
+                briFile << item.first << "," << round(item.second) << endl;
+            }
+            briFile.close();
+        } else {
+            cout << "Failed to create rsbri.txt" << endl;
         }
 
+        // 输出 rsbre 到 rsbre.txt
+        ofstream breFile("rsbre.txt");
+        if (breFile.is_open()) {
+            for (const auto& item : rsbre) {
+                breFile << item.first << "," << round(item.second) << endl;
+            }
+            breFile.close();
+        } else {
+            cout << "Failed to create rsbre.txt" << endl;
+        }
+
+        // 输出 rsvel 到 rsvel.txt
+        ofstream velFile("rsvel.txt");
+        if (velFile.is_open()) {
+            for (const auto& item : rsvel) {
+                velFile << round(item) << endl;
+            }
+            velFile.close();
+        } else {
+            cout << "Failed to create rsvel.txt" << endl;
+        }
+
+        //输出 rspit 到 rspit.txt
+        vector<pair<int,double>> rspit = resultPIT(allSNotes);
+        ofstream pitFile("rspit.txt");
+        if (pitFile.is_open()) {
+            for (const auto& item : rspit) {
+                pitFile << item.first << "," << round(item.second) << endl;
+            }
+            pitFile.close();
+        } else {
+            cout << "Failed to create rspit.txt" << endl;
+        }
+
+
+        cout<<"Completed!"<<endl;
 
 
 

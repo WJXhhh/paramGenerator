@@ -9,7 +9,7 @@
 #include "../struct/Point.h"
 
 
-std::pair<std::vector<Point>, std::vector<Point>> processWaveforms(
+std::pair<std::vector<Point>, std::vector<Point>> processWaveformsWithOffset(
     const std::vector<Point>& wave1,
     const std::vector<Point>& wave2,
     double pbs, int m, int n);

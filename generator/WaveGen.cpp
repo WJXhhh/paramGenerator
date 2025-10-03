@@ -10,6 +10,7 @@
 #include <random>
 #include <algorithm>
 #include <set>
+#include "../cons.h"
 
 // 一维柏林噪声生成器
 class PerlinNoise {
@@ -221,7 +222,7 @@ std::vector<Point> generateMountainWave(
     }
 
     // 添加柏林噪声（不影响关键点）
-    const double noiseScale = 0.1;
+    const double noiseScale = 0.01*drama;
     for (size_t i = 0; i < points.size(); ++i) {
         // 如果是关键点，不添加噪声
         if (protectedIndices.find(i) != protectedIndices.end()) {

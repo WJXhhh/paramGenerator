@@ -23,4 +23,6 @@ add_executable(paramGenerator main.cpp
         math/soft_diff.h
         reasoner/bri_reasoner.cpp
         reasoner/bri_reasoner.h
+        reasoner/pit_reasoner.cpp
+        reasoner/pit_reasoner.h
 )
