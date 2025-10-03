@@ -44,49 +44,49 @@ vector<pair<int,double>> resultBRI (const vector<note_simple> &notes) {
 
         vector<Point> ttv;
 
-        /*if (dtl >= 4 || (!hasPrev)) {
-            double height = 54-((softDiffAtan<double>(note.pitch,60,40,1))*0.5);
-            double ph = 10-((softDiffAtan<double>(note.pitch,60,40,1))*1);
+        if (dtl >= 4 || (!hasPrev)) {
+            double height = 54-((softDiffAtan<double>(note.pitch,60,60,1))*0.7);
+            double ph = 15-((softDiffAtan<double>(note.pitch,60,40,1))*1);
             vector<Point> wv = generateMountainWave(
             max(note.start - 120,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            20,height,20,2,ph,0.4*note.duration,0.1,false,true
+            20,height,20,2,ph,0.4*note.duration,0.1,false,true,0.01
 
             );
             ttv = wv;
         }else if (hasNext&&((next_note.start - (note.start+note.duration))/tempo>=1)&&dtp >= 3) {
-            double height = 54-((softDiffAtan<double>(note.pitch,60,40,1))*0.5);
-            double ph = 4+((softDiffAtan<double>(note.pitch,60,40,1))*1);
+            double height = 54-((softDiffAtan<double>(note.pitch,60,60,1))*0.7);
+            double ph = 8+((softDiffAtan<double>(note.pitch,60,40,1))*1);
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            20,height,20,1,ph,0.3*note.duration,0.1,false,true
+            20,height,20,1,ph,0.3*note.duration,0.1,false,true,0.01
 
             );
             ttv = wv;
         }
         else if (hasNext&&(next_note.pitch - note.pitch)>=2&&(note.duration/tempo)>=1&&(note.duration/tempo)<=3) {
-            double height = 54-((softDiffAtan<double>(note.pitch,60,40,1))*0.5);
-            double ph = 5+((softDiffAtan<double>(note.pitch,60,50,1))*1);
+            double height = 54-((softDiffAtan<double>(note.pitch,60,60,1))*0.7);
+            double ph = 8+((softDiffAtan<double>(note.pitch,60,50,1))*1);
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
-            10,height,10,2,ph,0.5*note.duration,0.1,false,true
+            10,height,10,2,ph,0.5*note.duration,0.1,false,true,0.01
 
             );
             ttv = wv;
         }
-        else {*/
-            double height = 44-((softDiffAtan<double>(note.pitch,60,40,1))*0.5);
+        else {
+            double height = 44-((softDiffAtan<double>(note.pitch,60,60,1))*0.5);
             double ph = 5+((softDiffAtan<double>(note.pitch,60,50,1))*2);
             vector<Point> wv = generateMountainWave(
             max(note.start - 20,headPos), min(note.start + note.duration + 20,endPos),
             note.start+(0.2*note.duration),note.start+(0.8*note.duration),
             20,height,20,0,0,0,0,false,true
 
-            ,0.01);
+            ,0.02);
             ttv = wv;
-        //}
+        }
 
 
        /*double height = 12+((softDiffAtan<double>(note.pitch,60,80,1))*1);
