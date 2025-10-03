@@ -9,6 +9,7 @@
 #include "reasoner/vel_reasoner.h"
 #include "reasoner/bre_reasoner.h"
 #include "cons.h"
+#include "reasoner/bri_reasoner.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -57,10 +58,10 @@ int main() {
             }
         }
 
-        vector<pair<int,double>> rs = resultBRE(allSNotes);
+        vector<pair<int,double>> rs = resultBRI(allSNotes);
 
         for (auto &item:rs) {
-            //cout<<item.first<<" , "<<item.second<<endl;
+            cout<<item.first<<" , "<<item.second<<"\n";
         }
 
 

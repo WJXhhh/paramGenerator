@@ -7,6 +7,10 @@
 
 extern double tempo;
 
+extern double headPos;
+
+extern double endPos;
+
 
 
 #endif //PARAMGENERATOR_CONS_H

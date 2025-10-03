@@ -4,3 +4,7 @@
 #include "cons.h"
 
 double tempo = 120;
+
+double headPos = 0;
+
+double endPos = 2147483647;
