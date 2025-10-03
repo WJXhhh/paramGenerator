@@ -10,7 +10,7 @@
 #include "../struct/Point.h"
 
 
-std::pair<std::vector<Point>, std::vector<Point>> smoothFusion(
+std::pair<std::vector<Point>, std::vector<Point>> processWaveforms(
     const std::vector<Point>& wave1,
     const std::vector<Point>& wave2);
 

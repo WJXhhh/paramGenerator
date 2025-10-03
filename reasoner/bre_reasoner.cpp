@@ -106,7 +106,7 @@ vector<pair<int,double>> resultBRE (const vector<note_simple> &notes) {
        if (allv.size()>0&&allv.size()<10) {
            vector<Point> prwv = allv[allv.size()-1];
            int bkk = ttv.size();
-           pair<vector<Point>,vector<Point>> pp = smoothFusion(prwv,ttv);
+           pair<vector<Point>,vector<Point>> pp = processWaveforms(prwv,ttv);
            allv[allv.size()-1] = pp.first;
            ttv = pp.second;
            //cout<<bkk<<" "<<ttv.size()<<endl;
